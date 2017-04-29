@@ -1,0 +1,137 @@
+﻿@model SendingEmailInAspNetMVC.Models.ContactForm
+
+@{
+    ViewBag.Title = "Contact";
+}
+
+<style>
+    
+    .form-control:focus {
+        border: 1px solid #cccccc;
+        box-shadow: none !important;
+    }
+    .input-group {
+        width: 100%;
+    }
+
+    .input-group-addon {
+        width:33%;
+        border-radius:0;
+        text-align: right;
+    }
+    .form-control {
+        width: 67%;
+        border-radius: 0;
+    }
+    .btn {
+        border-radius: 0;
+    }
+</style>
+
+<h2>Contact Form</h2>
+<hr />
+
+
+@using (Html.BeginForm("Contact", "Home", FormMethod.Post, new { enctype = "multipart/form-data", id = "contactForm" }))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="input-group">
+                    @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "input-group-addon" })
+                    @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
+                </div>
+                <div class="col-md-6">
+                    @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+                </div>
+                <br />
+                <div class="input-group">
+                    @Html.LabelFor(model => model.Email, htmlAttributes: new { @class = "input-group-addon" })
+                    @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control" } })
+                </div>
+                <div class="col-md-6">
+                    @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+                </div>
+                <br />
+                <div class="input-group">
+                    @Html.LabelFor(model => model.Subject, htmlAttributes: new { @class = "input-group-addon" })
+
+                    @Html.EditorFor(model => model.Subject, new { htmlAttributes = new { @class = "form-control" } })
+                </div>
+                <div class="col-md-6">
+                    @Html.ValidationMessageFor(model => model.Subject, "", new { @class = "text-danger" })
+                </div>
+                <br />
+                <div class="input-group">
+                    @Html.LabelFor(model => model.UploadFile, htmlAttributes: new { @class = "input-group-addon" })
+
+                    @Html.TextBoxFor(model => model.UploadFile, new
+                   {
+                       type = "file", @*accept = "",*@ name = "File",
+                       @class = "form-control"
+                   })
+                </div>
+                <div class="col-md-6">
+                    @Html.ValidationMessageFor(model => model.UploadFile, "", new { @class = "text-danger" })
+                </div>
+                
+            </div>
+            <div class="gap-20 visible-sm visible-xs"></div>
+            <div class="col-md-6">
+                <div class="input-group">
+                    @Html.LabelFor(model => model.Message, htmlAttributes: new { @class = "input-group-addon" })
+
+                    @Html.EditorFor(model => model.Message, new { htmlAttributes = new { @class = "form-control", rows = 9 } })
+
+                </div>
+                @Html.ValidationMessageFor(model => model.Message, "", new { @class = "text-danger" })
+            </div>
+            
+        </div>
+        <br />
+
+        <div class="form-group">
+            <div class="col-md-12">
+                <input type="submit" value="Submit" class="btn btn-default" /> | 
+                <span>@Html.ActionLink("Back to List", "Index", null, new { @class = "btn btn-default" })</span>
+            </div>
+        </div>
+    </div>
+}
+
+<div class="modal fade" id="myModal" role="dialog">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title" style="color:green">Success!!</h4>
+            </div>
+            <div class="modal-body">
+                <p>Your Message Has Been Sent Successfully!!</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+
+    <script>
+        $(document).ready(function () {
+
+            if ("@ViewBag.SendingStatus" == "Sent") {
+                $("#myModal").modal('show');
+           }
+
+        });
+    </script>
+}
